@@ -2,11 +2,10 @@
 
 require_once('./connection.php');
 
-$id = $_GET['id'];
+$id = $_POST['id'];
 $stmt = $pdo->prepare('SELECT b.id AS book_id, title, release_date, cover_path, language, summary, price, stock_saldo, pages, type, first_name, last_name FROM books b LEFT JOIN book_authors ba ON ba.book_id=b.id LEFT JOIN authors a ON ba.author_id=a.id WHERE b.id = :id');
 $stmt->execute(['id' => $id]);
 $book = $stmt->fetch();
-var_dump($stmt);
 
 $stmt = $pdo->prepare('SELECT count(*) FROM orders WHERE book_id = :id');
 $stmt->execute(['id' => $id]);
@@ -32,17 +31,9 @@ $typeInEstonian = [
 
     <div id="container">
 
-        <?php if ( $ordersCount == 0 ) { ?>
-            <form action="./delete.php" method="post">
-                <input type="hidden" name="id" value="<?php echo $book['book_id']; ?>">
-                <button type="submit" name="action" value="delete">Kustuta</button>
-            </form>
-            <br><br>
-        <?php } ?>
-
         <form action="./edit.php" method="post">
                 <input type="hidden" name="id" value="<?php echo $book['book_id']; ?>">
-                <button type="submit" name="action" value="edit">Muuda</button>
+                <button type="submit" name="action" value="save">Salvesta</button>
             </form>
 
         <div>
@@ -51,7 +42,8 @@ $typeInEstonian = [
         <br>
         
         <div>
-            <span class="label">Autor:</span><?php echo $book['first_name']; ?> <?php echo $book['last_name']; ?>
+            <span class="label">Autor:</span> <input type="text" value="<?php echo $book['first_name']; ?>">
+            <span class="label">Autor:</span> <input type="text" value="<?php echo $book['last_name']; ?>">
         </div>
         <br>
 
@@ -99,3 +91,4 @@ $typeInEstonian = [
 
 </body>
 </html>
+

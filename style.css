@@ -6,3 +6,12 @@
     margin-right: 8px;
     font-weight: bold;
 }
+
+#buttons {
+    display: flex;
+    margin-bottom: 32px;
+}
+
+#buttons div {
+    margin: 8px;
+}

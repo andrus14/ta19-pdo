@@ -6,7 +6,6 @@ $id = $_GET['id'];
 $stmt = $pdo->prepare('SELECT b.id AS book_id, title, release_date, cover_path, language, summary, price, stock_saldo, pages, type, first_name, last_name FROM books b LEFT JOIN book_authors ba ON ba.book_id=b.id LEFT JOIN authors a ON ba.author_id=a.id WHERE b.id = :id');
 $stmt->execute(['id' => $id]);
 $book = $stmt->fetch();
-var_dump($stmt);
 
 $stmt = $pdo->prepare('SELECT count(*) FROM orders WHERE book_id = :id');
 $stmt->execute(['id' => $id]);
@@ -32,18 +31,23 @@ $typeInEstonian = [
 
     <div id="container">
 
-        <?php if ( $ordersCount == 0 ) { ?>
-            <form action="./delete.php" method="post">
-                <input type="hidden" name="id" value="<?php echo $book['book_id']; ?>">
-                <button type="submit" name="action" value="delete">Kustuta</button>
-            </form>
-            <br><br>
-        <?php } ?>
+        <div id="buttons">
+            <?php if ( $ordersCount == 0 ) { ?>
+                <div>
+                    <form action="./delete.php" method="post">
+                        <input type="hidden" name="id" value="<?php echo $book['book_id']; ?>">
+                        <button type="submit" name="action" value="delete">Kustuta</button>
+                    </form>
+                </div>
+            <?php } ?>
 
-        <form action="./edit.php" method="post">
-                <input type="hidden" name="id" value="<?php echo $book['book_id']; ?>">
-                <button type="submit" name="action" value="edit">Muuda</button>
-            </form>
+            <div>
+                <form action="./edit.php" method="post">
+                    <input type="hidden" name="book_id" value="<?php echo $book['book_id']; ?>">
+                    <button type="submit" name="action" value="edit">Muuda</button>
+                </form>
+            </div>
+        </div>
 
         <div>
             <span class="label">Pealkiri:</span><?php echo $book['title']; ?>
